@@ -16,7 +16,18 @@
 			
 		</div><!-- .footer-contact -->
 		<div class="footer-menus">
-				
+			<nav class="footer-navigation">
+				<?php
+					wp_nav_menu(
+						array(
+							'theme_location' => 'footer-left',
+							'menu_id'        => 'header-menu',
+							'theme_location' => 'footer-right',
+						)
+					);
+				?>			
+				<a href="<?php echo esc_url( get_privacy_policy_url() ); ?>">Privacy Policy</a>	
+			</nav>
 		</div><!-- .footer-menus -->
 		<div class="site-info">
 			<?php esc_html_e( 'Created by ', 'fwd' ); ?><a href="<?php echo esc_url( __( 'https://wp.bcitwebdeveloper.ca/', 'fwd' ) ); ?>"><?php esc_html_e( 'Jonathon Leathers', 'fwd' ); ?></a>
