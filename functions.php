@@ -174,6 +174,12 @@ add_action('widgets_init', 'fwd_widgets_init');
  */
 function fwd_scripts()
 {
+	wp_enqueue_style(
+		'fwd-googlefonts', // handle ( unique name)
+		'https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Poppins:wght@400;700&display=swap',
+		array(), // dependencies
+		null // version (use null for google fonts)
+	);
 	wp_enqueue_style('fwd-style', get_stylesheet_uri(), array(), _S_VERSION);
 	wp_style_add_data('fwd-style', 'rtl', 'replace');
 
@@ -182,6 +188,16 @@ function fwd_scripts()
 	if (is_singular() && comments_open() && get_option('thread_comments')) {
 		wp_enqueue_script('comment-reply');
 	}
+
+	if (is_front_page()) {
+		// name, file path, /point/to/concateneted/theme/folder/file.name, empty aray, version #, media (bull is default to it) 
+		wp_enqueue_style('swiper-styles', get_template_directory_uri() . '/css/swiper-bundle.css', array(), '7.4.1');
+		// 'defer' has scripts load at the bottom of the page but smartly
+		// '_S_VERSION' is hte version of the theme chosen and used.
+		wp_enqueue_script('swiper-scripts', get_template_directory_uri() . '/js/swiper-bundle.min.js', array(), '7.4.1', array('strategy' => 'defer'));
+		wp_enqueue_script('swiper-settings', get_template_directory_uri() . '/js/swiper-settings.js', array('swiper-scripts'), _S_VERSION, array('strategy' => 'defer'));
+	}
+	
 }
 add_action('wp_enqueue_scripts', 'fwd_scripts');
 
@@ -201,11 +217,23 @@ require get_template_directory() . '/inc/template-functions.php';
 require get_template_directory() . '/inc/customizer.php';
 
 /**
+ * Custom Post Types & Taxonomies
+ */
+require get_template_directory() . '/inc/cpt-taxonomy.php';
+
+
+/**
  * Load Jetpack compatibility file.
  */
 if (defined('JETPACK__VERSION')) {
 	require get_template_directory() . '/inc/jetpack.php';
 }
+
+
+
+// _________________________
+
+
 
 // Add Theme Color Meta Tag
 function fwd_theme_color()
@@ -280,3 +308,4 @@ function fwd_post_filter($use_block_editor, $post)
 	}
 }
 add_filter('use_block_editor_for_post', 'fwd_post_filter', 10, 2);
+
